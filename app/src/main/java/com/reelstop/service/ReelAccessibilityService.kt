@@ -9,34 +9,38 @@ import com.reelstop.detection.InstagramDetector
 import com.reelstop.detection.ReelTransitionDetector
 import com.reelstop.detection.ReelsDetector
 import com.reelstop.domain.SessionManager
-import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import javax.inject.Inject
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface AccessibilityServiceEntryPoint {
+    fun instagramDetector(): InstagramDetector
+    fun reelsDetector(): ReelsDetector
+    fun transitionDetector(): ReelTransitionDetector
+    fun sessionManager(): SessionManager
+}
 
 /**
  * Core AccessibilityService responsible for observing Instagram window and scroll events.
  *
+ * Uses Hilt's EntryPoint pattern since AccessibilityService is a specialized system service.
  * Adheres to strict privacy principles:
  * - Never logs or persists user screen content or text.
  * - Only detects window package name, Reel UI signatures, and scroll transitions.
  * - Zero network capabilities (no INTERNET permission in manifest).
  */
-@AndroidEntryPoint
 class ReelAccessibilityService : AccessibilityService() {
 
-    @Inject
     lateinit var instagramDetector: InstagramDetector
-
-    @Inject
     lateinit var reelsDetector: ReelsDetector
-
-    @Inject
     lateinit var transitionDetector: ReelTransitionDetector
-
-    @Inject
     lateinit var sessionManager: SessionManager
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
@@ -44,6 +48,18 @@ class ReelAccessibilityService : AccessibilityService() {
     companion object {
         var isServiceRunning = false
             private set
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        val entryPoint = EntryPointAccessors.fromApplication(
+            applicationContext,
+            AccessibilityServiceEntryPoint::class.java
+        )
+        instagramDetector = entryPoint.instagramDetector()
+        reelsDetector = entryPoint.reelsDetector()
+        transitionDetector = entryPoint.transitionDetector()
+        sessionManager = entryPoint.sessionManager()
     }
 
     override fun onServiceConnected() {
@@ -98,15 +114,23 @@ class ReelAccessibilityService : AccessibilityService() {
     }
 
     override fun onInterrupt() {
-        instagramDetector.reset()
-        reelsDetector.reset()
-        sessionManager.onReelsExited()
+        if (::instagramDetector.isInitialized) {
+            instagramDetector.reset()
+        }
+        if (::reelsDetector.isInitialized) {
+            reelsDetector.reset()
+        }
+        if (::sessionManager.isInitialized) {
+            sessionManager.onReelsExited()
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         isServiceRunning = false
         serviceScope.cancel()
-        sessionManager.stopSessionNow()
+        if (::sessionManager.isInitialized) {
+            sessionManager.stopSessionNow()
+        }
     }
 }

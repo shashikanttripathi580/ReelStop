@@ -4,11 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -22,8 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val mainViewModel: MainViewModel by viewModels()
-    private val settingsViewModel: SettingsViewModel by viewModels()
+    private var mainViewModel: MainViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +30,13 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ReelStopTheme {
+                val vm: MainViewModel = hiltViewModel()
+                val settingsVm: SettingsViewModel = hiltViewModel()
+                mainViewModel = vm
+
                 ReelStopAppNavigation(
-                    mainViewModel = mainViewModel,
-                    settingsViewModel = settingsViewModel
+                    mainViewModel = vm,
+                    settingsViewModel = settingsVm
                 )
             }
         }
@@ -41,7 +44,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        mainViewModel.checkPermissions(this)
+        mainViewModel?.checkPermissions(this)
     }
 }
 
