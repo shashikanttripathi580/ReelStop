@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">ReelStop</string>
+    <string name="accessibility_service_description">ReelStop observes when Instagram Reels are playing to display your gentle, real-time scroll counter. All processing is 100% private and stays on your device.</string>
+    
+    <!-- Dashboard -->
+    <string name="dashboard_title">ReelStop</string>
+    <string name="dashboard_subtitle">Mindful awareness for short-form video</string>
+    <string name="today_reels">Today\'s Reels</string>
+    <string name="today_sessions">Today\'s Sessions</string>
+    <string name="total_reel_time">Total Reel Time</string>
+    <string name="longest_session">Longest Session</string>
+    <string name="active_session">Active Session</string>
+    <string name="recent_sessions">Recent Sessions</string>
+    <string name="no_sessions_yet">No Reels watched today yet.</string>
+    <string name="test_counter_button">Test Overlay Counter</string>
+    <string name="test_counter_hint">Tap to preview how the counter looks and behaves.</string>
+    
+    <!-- Permissions -->
+    <string name="perm_accessibility_title">Accessibility Service</string>
+    <string name="perm_accessibility_desc">Required to detect when Instagram Reels change.</string>
+    <string name="perm_overlay_title">Display Over Other Apps</string>
+    <string name="perm_overlay_desc">Required to show the non-interactive top counter.</string>
+    <string name="perm_notifications_title">Notifications</string>
+    <string name="perm_notifications_desc">Required for milestone awareness alerts.</string>
+    <string name="grant_permission">Enable</string>
+    <string name="permission_granted">Enabled</string>
+    
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="setting_counter_enabled">Show Floating Counter</string>
+    <string name="setting_counter_enabled_desc">Display real-time counter while watching Reels</string>
+    <string name="setting_counter_position">Counter Position</string>
+    <string name="setting_daily_goal">Daily Awareness Target</string>
+    <string name="setting_daily_goal_desc">Notify gently when daily target is reached</string>
+    <string name="setting_session_limit">Session Reminder</string>
+    <string name="setting_session_limit_desc">Notify when a single session reaches a limit</string>
+    <string name="setting_milestone_alerts">Milestone Nudges</string>
+    <string name="setting_milestone_alerts_desc">Subtle notification at 25, 50, and 100 Reels</string>
+    <string name="setting_privacy">Privacy &amp; Data Transparency</string>
+    
+    <!-- Awareness Nudges (Non-judgmental) -->
+    <string name="milestone_nudge_25">You\'ve watched 25 Reels. Take a gentle breath.</string>
+    <string name="milestone_nudge_50">You\'ve watched 50 Reels. Ready for a quick stretch?</string>
+    <string name="milestone_nudge_100">You\'ve watched 100 Reels today. Time for a screen break?</string>
+    <string name="session_nudge_time">You\'ve been watching Reels for %1$d minutes. Take a pause?</string>
+</resources>
